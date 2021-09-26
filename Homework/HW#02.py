@@ -17,7 +17,7 @@ class YAML_Files():
     """
     This class can dynamically create attributes at run time.
 
-    The perfect YAML Fourm:
+    The perfect YAML Form:
 
     EC_Engine:
         populationSize: 100     #[mandatory parameter, type int]

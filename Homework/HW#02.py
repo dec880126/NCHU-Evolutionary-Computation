@@ -88,9 +88,7 @@ class YAML_Files():
         incorrectTypes = []
 
         for name, value in vars(self).items():
-            if name == "REAL_sectionName":
-                continue
-            if type(value) is not DATATYPES[name] and value != "":
+            if type(value) is not DATATYPES[name]:
                 incorrectTypes.append(name)
 
         return incorrectTypes
@@ -105,22 +103,26 @@ class YAML_Files():
 
 class Miss_param(Exception):
     def __init__(self) -> None:
-        print("[!]Miss some mandatory parameters.")
+        if not options.quietMode:
+            print("[!]Miss some mandatory parameters.")
 
 
 class Incorrect_DataType(Exception):
     def __init__(self) -> None:
-        print("[!]Some parameters have the wrong data type.")
+        if not options.quietMode:
+            print("[!]Some parameters have the wrong data type.")
 
 
 class Both_Error(Exception):
     def __init__(self) -> None:
-        print("[!]Some parameters have the wrong data type and miss some mandatory parameters.")
+        if not options.quietMode:
+            print("[!]Some parameters have the wrong data type and miss some mandatory parameters.")
 
 
 class Wrong_sectionName(Exception):
     def __init__(self) -> None:
-        print(f"[!]The sectione name of the yaml file is incorrect. (Not '{SECTION_NAME}')")
+        if not options.quietMode:
+            print(f"[!]The sectione name of the yaml file is incorrect. (Not '{SECTION_NAME}')")
 
 def main(argv=None):
     if argv is None:
@@ -141,6 +143,7 @@ def main(argv=None):
         help="read the PATH of outputFile",
         default='output_result.txt'
     )
+    global options
     (options, *_) = parser.parse_args(argv)
 
     with open(options.inputFile, 'r') as f:
@@ -148,9 +151,6 @@ def main(argv=None):
 
     yamlFiles = YAML_Files()
     yamlFiles.load_data(YAML_data=data)
-
-    # GET REAL SECTION NAME
-    yamlFiles.REAL_sectionName = list(data.keys())[0]
     
     # CHECK FOR MANDATORY　PARAMETERS
     missingParams = yamlFiles.check_mandatories()

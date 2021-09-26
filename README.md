@@ -11,3 +11,4 @@
 ## Homework
 
  - [Homework #1: Main program & YAML configuration files](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2301.py)
+ - [Homework #2: Object-oriented & Python classes](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2302.py)

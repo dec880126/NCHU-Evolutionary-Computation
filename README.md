@@ -10,4 +10,4 @@
 
 ## Homework
 
- - [HW#01](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2301.py) - program that can read and verify the YAML input configuration files
+ - [Homework #1: Main program & YAML configuration files](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2301.py)

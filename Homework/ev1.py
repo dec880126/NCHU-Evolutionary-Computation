@@ -82,10 +82,13 @@ def findWorstIndex(l):
             imin=i
     return imin
 
+maxvalList = []
+avgvalList = []
 
 #Print some useful stats to screen
 def printStats(pop, gen):
     global sca
+    global maxvalList, avgvalList
 
     print('Generation:',gen)
 
@@ -99,19 +102,21 @@ def printStats(pop, gen):
         if 'sca' in globals():
             sca.remove()
         sca = plt.scatter(p.x, p.fit, lw=0, s=200, c='red', alpha=0.5)
-        plt.pause(0.1)
+        # plt.pause(0.1)
     
-    print(f'Max fitness: {maxval}')
-    print(f'Avg fitness: {avgval/len(pop)}\n')
+    maxvalList.append(maxval)
+    avgvalList.append(avgval/len(pop))
+    # print(f'Max fitness: {maxval}')
+    # print(f'Avg fitness: {avgval/len(pop)}\n')
 
 
 #A trivial Individual class
 class Individual:
-    def __init__(self,x=0,fit=0):
+    def __init__(self, x=0, fit=0) -> None:
         self.x=x
         self.fit=fit
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
          return self.fit < other.fit
 
 
@@ -138,7 +143,7 @@ def ev1(cfg):
     printStats(population,0)
 
     #evolution main loop
-    for i in range(cfg.generationCount):
+    for i in range(1, cfg.generationCount+1):
         parentGroup = []
         childGroup = []
 
@@ -161,9 +166,19 @@ def ev1(cfg):
                 population[0]=child
 
         #print stats    
-        printStats(population,i+1)
+        printStats(population,i)
     
     plt.ioff()
+    plt.show()
+
+    plt.subplot(1, 2, 1)
+    plt.plot([i for i in range(cfg.generationCount + 1)], maxvalList)
+    plt.title('Max fitness')
+
+    plt.subplot(1, 2, 2)
+    plt.plot([i for i in range(cfg.generationCount + 1)], avgvalList)
+    plt.title('Avg fitness')
+
     plt.show()
         
         

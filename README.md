@@ -13,3 +13,4 @@
  - [Homework #1: Main program & YAML configuration files](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2301.py)
  - [Homework #2: Object-oriented & Python classes](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2302.py)
  - [Homework #3: Fun with random numbers](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2303.py)
+ - [Homework #4: EV1 with modified fitness function & data plotting](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2304.py)

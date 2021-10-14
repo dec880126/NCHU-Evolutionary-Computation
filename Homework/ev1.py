@@ -13,6 +13,7 @@ import sys
 import yaml
 from math import cos, pi
 from random import Random
+from statistics import stdev
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -141,6 +142,8 @@ def ev1(cfg):
     
     #print stats 
     printStats(population,0)
+    stddevList = []
+    stddevList.append(stdev([pop.fit for pop in population]))
 
     #evolution main loop
     for i in range(1, cfg.generationCount+1):
@@ -165,19 +168,28 @@ def ev1(cfg):
             if child.fit > population[0].fit:
                 population[0]=child
 
-        #print stats    
+        stddevList.append(stdev([pop.fit for pop in population]))
+        
+        #print stats  
         printStats(population,i)
     
     plt.ioff()
     plt.show()
 
-    plt.subplot(1, 2, 1)
+    plt.subplot(2, 2, 1)
     plt.plot([i for i in range(cfg.generationCount + 1)], maxvalList)
-    plt.title('Max fitness')
+    plt.xlabel('Generation')
+    plt.ylabel('Max Fitness')
 
-    plt.subplot(1, 2, 2)
+    plt.subplot(2, 2, 2)
     plt.plot([i for i in range(cfg.generationCount + 1)], avgvalList)
-    plt.title('Avg fitness')
+    plt.xlabel('Generation')
+    plt.ylabel('Avg Fitness')
+
+    plt.subplot(2, 2, 3)
+    plt.plot([i for i in range(cfg.generationCount + 1)], stddevList)
+    plt.xlabel('Generation')
+    plt.ylabel('Standard deviation of fitness')
 
     plt.show()
         

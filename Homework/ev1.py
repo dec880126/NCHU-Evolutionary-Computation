@@ -139,22 +139,26 @@ def ev1(cfg):
 
     #evolution main loop
     for i in range(cfg.generationCount):
-        #randomly select two parents
-        parents=prng.sample(population,2)
+        parentGroup = []
+        childGroup = []
 
-        #recombine using simple average
-        childx=(parents[0].x+parents[1].x)/2
+        # replace 3 child in every generation
+        for idx in range(3):
+            # randomly select two parents
+            parentGroup.append(prng.sample(population,2))
+            # recombine using simple average
+            childGroup.append((parentGroup[idx][0].x + parentGroup[idx][1].x)/2)
         
-        #random mutation using normal distribution
-        if prng.random() <= cfg.mutationProb:
-            childx=prng.normalvariate(childx,cfg.mutationStddev)
+            #random mutation using normal distribution
+            if prng.random() <= cfg.mutationProb:
+                childGroup[idx]=prng.normalvariate(childGroup[idx], cfg.mutationStddev)
             
-        #survivor selection: replace worst
-        child=Individual(childx,fitnessFunc(childx))
-        
-        iworst=findWorstIndex(population)
-        if child.fit > population[iworst].fit:
-            population[iworst]=child
+            #survivor selection: replace worst
+            child=Individual(childGroup[idx],fitnessFunc(childGroup[idx]))
+            
+            population.sort()
+            if child.fit > population[0].fit:
+                population[0]=child
 
         #print stats    
         printStats(population,i+1)

@@ -78,17 +78,6 @@ def fitnessFunc(x):
     # return 50.0 - x*x
     return -10 - (0.04 * x)**2 + 10*np.cos(0.04*pi*x)
 
-
-#Find index of worst individual in population
-def findWorstIndex(l):
-    minval=l[0].fit
-    imin=0
-    for i in range(len(l)):
-        if l[i].fit < minval:
-            minval=l[i].fit
-            imin=i
-    return imin
-
 maxvalList = []
 avgvalList = []
 

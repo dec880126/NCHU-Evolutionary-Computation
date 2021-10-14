@@ -22,50 +22,51 @@ class EV1_Config:
     """
     # class variables
     sectionName='EV1'
-    options={'populationSize': (int,True),
-             'generationCount': (int,True),
-             'randomSeed': (int,True),
-             'minLimit': (float,True),
-             'maxLimit': (float,True),
-             'mutationProb': (float,True),
-             'mutationStddev': (float,True)}
+    options={'populationSize': (int, True),
+             'generationCount': (int, True),
+             'randomSeed': (int, True),
+             'minLimit': (float, True),
+             'maxLimit': (float, True),
+             'mutationProb': (float, True),
+             'mutationStddev': (float, True)}
      
     #constructor
     def __init__(self, inFileName):
         #read YAML config and get EC_Engine section
-        infile=open(inFileName,'r')
-        ymlcfg=yaml.safe_load(infile)
+        infile = open(inFileName, 'r')
+        ymlcfg = yaml.safe_load(infile)
         infile.close()
-        eccfg=ymlcfg.get(self.sectionName,None)
-        if eccfg is None: raise Exception('Missing EV1 section in cfg file')
+        eccfg = ymlcfg.get(self.sectionName,None)
+        if eccfg is None:
+            raise Exception('Missing EV1 section in cfg file')
          
         #iterate over options
         for opt in self.options:
             if opt in eccfg:
-                optval=eccfg[opt]
+                optval = eccfg[opt]
  
                 #verify parameter type
                 if type(optval) != self.options[opt][0]:
-                    raise Exception('Parameter "{}" has wrong type'.format(opt))
+                    raise Exception(f'Parameter "{opt}" has wrong type')
                  
                 #create attributes on the fly
-                setattr(self,opt,optval)
+                setattr(self,opt, optval)
             else:
                 if self.options[opt][1]:
-                    raise Exception('Missing mandatory parameter "{}"'.format(opt))
+                    raise Exception(f'Missing mandatory parameter "{opt}"')
                 else:
-                    setattr(self,opt,None)
+                    setattr(self, opt, None)
      
     #string representation for class data    
     def __str__(self):
-        return str(yaml.dump(self.__dict__,default_flow_style=False))
+        return str(yaml.dump(self.__dict__, default_flow_style=False))
 
 
  #A trivial Individual class
 class Individual:
     def __init__(self, x=0, fit=0) -> None:
-        self.x=x
-        self.fit=fit
+        self.x = x
+        self.fit = fit
 
     def __lt__(self, other) -> bool:
          return self.fit < other.fit
@@ -86,37 +87,37 @@ def printStats(pop, gen):
     global sca
     global maxvalList, avgvalList
 
-    print('Generation:',gen)
+    print('Generation:', gen)
 
-    avgval=0
-    maxval=pop[0].fit
+    avgval = 0
+    maxval = pop[0].fit
     for p in pop:
-        avgval+=p.fit
+        avgval += p.fit
         if p.fit > maxval:
-            maxval=p.fit
+            maxval = p.fit
         print(f"{p.x=}\t{p.fit=}")
         if 'sca' in globals():
             sca.remove()
         sca = plt.scatter(p.x, p.fit, lw=0, s=200, c='red', alpha=0.5)
-        # plt.pause(0.1)
+        plt.pause(0.03)
     
     maxvalList.append(maxval)
     avgvalList.append(avgval/len(pop))
-    # print(f'Max fitness: {maxval}')
-    # print(f'Avg fitness: {avgval/len(pop)}\n')
+    print(f'Max fitness: {maxval}')
+    print(f'Avg fitness: {avgval/len(pop)}\n')
 
 #EV1: The simplest EA ever!
 #            
 def ev1(cfg):
     # start random number generator
-    prng=Random()
+    prng = Random()
     prng.seed(cfg.randomSeed)
     
     #random initialization of population
-    population=[]
+    population = []
     for i in range(cfg.populationSize):
-        x=prng.uniform(cfg.minLimit,cfg.maxLimit)
-        ind=Individual(x,fitnessFunc(x))
+        x = prng.uniform(cfg.minLimit, cfg.maxLimit)
+        ind = Individual(x, fitnessFunc(x))
         population.append(ind)
         
     plt.ion()
@@ -125,7 +126,7 @@ def ev1(cfg):
     plt.plot(plot_x, fitnessFunc(plot_x))
     
     #print stats 
-    printStats(population,0)
+    printStats(population, 0)
     stddevList = []
     stddevList.append(stdev([pop.fit for pop in population]))
 
@@ -137,20 +138,20 @@ def ev1(cfg):
         # replace 3 child in every generation
         for idx in range(3):
             # randomly select two parents
-            parentGroup.append(prng.sample(population,2))
+            parentGroup.append(prng.sample(population, 2))
             # recombine using simple average
-            childGroup.append((parentGroup[idx][0].x + parentGroup[idx][1].x)/2)
+            childGroup.append((parentGroup[idx][0].x + parentGroup[idx][1].x) / 2)
         
             #random mutation using normal distribution
             if prng.random() <= cfg.mutationProb:
-                childGroup[idx]=prng.normalvariate(childGroup[idx], cfg.mutationStddev)
+                childGroup[idx] = prng.normalvariate(childGroup[idx], cfg.mutationStddev)
             
             #survivor selection: replace worst
-            child=Individual(childGroup[idx],fitnessFunc(childGroup[idx]))
+            child = Individual(childGroup[idx], fitnessFunc(childGroup[idx]))
             
             population.sort()
             if child.fit > population[0].fit:
-                population[0]=child
+                population[0] = child
 
         stddevList.append(stdev([pop.fit for pop in population]))
         
@@ -200,7 +201,7 @@ def main(argv=None):
             raise Exception("Must specify input file name using -i or --input option.")
         
         #Get EV1 config params
-        cfg=EV1_Config(options.inputFileName)
+        cfg = EV1_Config(options.inputFileName)
         
         #print config params
         print(cfg)

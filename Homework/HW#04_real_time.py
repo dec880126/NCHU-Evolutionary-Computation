@@ -100,22 +100,26 @@ def printStats(pop, gen):
         if 'sca' in globals():
             sca.remove()
         plt.subplot(gs[0, :])
+        plt.title(f'EC Training, now in gen {gen}')
         sca = plt.scatter(p.x, p.fit, lw=0, s=200, c='red', alpha=0.5)
         plt.pause(0.01)
     
     maxvalList.append(maxval)
     avgvalList.append(avgval/len(pop))
     plt.subplot(gs[1, 0])
+    plt.title('Max Fitness')
     plt.scatter(gen, maxval, s=50, c='blue')
     plt.xlabel('Generation')
     plt.ylabel('Max Fitness')
 
     plt.subplot(gs[1, 1])
+    plt.title('Avg Fitness')
     plt.scatter(gen, avgval/len(pop), s=50, c='green')
     plt.xlabel('Generation')
     plt.ylabel('Avg Fitness')
 
     plt.subplot(gs[1, 2])
+    plt.title('Standard deviation of fitness')
     plt.scatter(gen, stdev((p.fit for p in pop)), s=50, c='pink')
     plt.xlabel('Generation')
     plt.ylabel('Standard deviation of fitness')
@@ -135,13 +139,15 @@ def ev1(cfg):
         x = prng.uniform(cfg.minLimit, cfg.maxLimit)
         ind = Individual(x, fitnessFunc(x))
         population.append(ind)
-        
+    
+    plt.figure(figsize=(13, 8))
     plt.ion()
     global gs
     gs = gridspec.GridSpec(2, 3)  
     graph_length = int(100)
     plot_x = np.linspace(-graph_length, graph_length, graph_length*2)
     plt.subplot(gs[0, :])
+    plt.title('EC Training')
     plt.plot(plot_x, fitnessFunc(plot_x))
     
     #print stats 

@@ -1,5 +1,5 @@
 """
- # Evolutionary Computation HW #04
+ # Evolutionary Computation HW #05
 
  - Student ID: 7110064490
  - Name: Huang Sin-Cyuan(黃新荃)
@@ -90,20 +90,19 @@ class Individual:
         return child
 
     def mutate(self):
+        # sigma_prime mutate first
+        self.DNA['sigma'] = self.DNA['sigma'] * exp(self.tau * self.prng.normalvariate(0, 1))
+
         # sigma's boundary rules
         if self.DNA['sigma'] < self.minSigma:
             self.DNA['sigma'] = self.minSigma
         if self.DNA['sigma'] > self.maxSigma:
             self.DNA['sigma'] = self.maxSigma
-        print('='*50)
-        print(f"sigma: {self.DNA['sigma']}")
-
-        # sigma_prime mutate first
-        # self.DNA['sigma'] = self.DNA['sigma'] * exp(self.tau * self.prng.normalvariate(0, 1))
 
         # then mutate x_prime
-        # self.DNA['x'] = self.DNA['x'] + self.DNA['sigma']*prng.normalvariate(0, 1)
-        self.DNA['x'] = self.DNA['x'] + (self.maxLimit - self.minLimit)*self.DNA['sigma']*self.prng.normalvariate(0, 1)
+        self.DNA['x'] = self.DNA['x'] + (
+            (self.maxLimit - self.minLimit) / 2
+        ) * self.DNA['sigma'] * self.prng.normalvariate(0, 1)
 
     def evaluateFitness(self):
         self.fit = fitnessFunc(self.DNA['x'])
@@ -152,10 +151,11 @@ def printStats(pop, gen):
     plt.ylabel('Avg Fitness')
 
     plt.subplot(gs[1, 2])
-    plt.title('Standard deviation of fitness')
-    plt.scatter(gen, stdev((p.fit for p in pop)), s=50, c='pink')
+    plt.title('Adaptive mutation strength')
+    plt.scatter(gen, p.DNA['sigma'], s=50, c='pink')
     plt.xlabel('Generation')
-    plt.ylabel('Standard deviation of fitness')
+    plt.ylabel('Adaptive mutation strength')
+    print(f'Adaptive mutation strength: {p.DNA["sigma"]}')
     print(f'Max fitness: {maxval}')
     print(f'Avg fitness: {avgval/len(pop)}\n')
 
@@ -172,6 +172,7 @@ def ev1(cfg):
     for i in range(cfg.populationSize):
         x = prng.uniform(cfg.minLimit, cfg.maxLimit)
         ind = Individual(x, fitnessFunc(x))
+        ind.sigma = prng.uniform(0.9,0.1)
         population.append(ind)
     
     # Plotting
@@ -192,9 +193,6 @@ def ev1(cfg):
 
     #evolution main loop
     for i in range(1, cfg.generationCount+1):
-        parentGroup = []
-        childGroup = []
-
         # replace 5 child in every generation
         for evolution in range(5):
             # randomly select two parents
@@ -202,7 +200,6 @@ def ev1(cfg):
 
             # Crossover
             child = parent_1.crossover(parent_2)
-            childGroup.append(child)
         
             # Mutate
             child.mutate()

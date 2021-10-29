@@ -99,7 +99,7 @@ def printStats(pop, gen):
         if 'sca' in globals():
             sca.remove()
         sca = plt.scatter(p.x, p.fit, lw=0, s=200, c='red', alpha=0.5)
-        plt.pause(0.03)
+        plt.pause(0.02)
     
     maxvalList.append(maxval)
     avgvalList.append(avgval/len(pop))

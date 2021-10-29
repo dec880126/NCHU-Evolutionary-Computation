@@ -15,4 +15,4 @@
  - [Homework #3: Fun with random numbers](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2303.py)
  - [Homework #4: EV1 with modified fitness function & data plotting](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2304.py)
  - [Homework #5: EV2: Improve EV1 to use adaptive mutation & stochastic crossover, multiple children per generation](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2305.py)
- - [Binary tournament selection experiment](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2306.py)
+ - [Homework #6: Binary tournament selection experiment](https://github.com/dec880126/NCHU-Evolutionary-Computation/blob/main/Homework/HW%2306.py)

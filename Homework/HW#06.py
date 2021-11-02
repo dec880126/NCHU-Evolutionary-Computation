@@ -28,16 +28,15 @@ prng.seed(123)
 pop = [prng.randrange(0,fit_range) for i in range(pop_size)]
 
 
-def plt_hist(pop, generation=0, bin_limit=fit_range):
+def plt_hist(pop, bin_limit=fit_range):
     """
     Plot histogram of population fitness values
     """
     plt.hist(pop, bins=range(0,bin_limit+1))
     plt.grid(True)
-    plt.title('Generation: ' + str(generation))
+    plt.title('Distribution of Population')
     plt.show()
     
-
 def binary_tournament(pop_in: list, prng: Random):
     """
     Binary tournament operator:
@@ -46,11 +45,10 @@ def binary_tournament(pop_in: list, prng: Random):
 
     - Tournament pairs should be randomly selected
     - All individuals from input population should participate in exactly 2 tournaments
-    """    
-    competitors = prng.choices(pop_in, k = 2)
-    pop_in.remove(min(competitors))
-
-    print(f"[>]{competitors[0]} v.s {competitors[1]} -> Winner is {max(competitors)}")
+    """
+    print(f"[>]{pop_in[0]} v.s {pop_in[1]} -> Winner is {max(pop_in)}")
+    
+    pop_in.remove(min(pop_in))
 
     return pop_in
 
@@ -59,11 +57,15 @@ def binary_tournament(pop_in: list, prng: Random):
 # to the initial population and plot the resulting fitness histograms.
 # This is somewhat like having a selection-only EA without any stochastic variation operators
 #
+competitors = []
 print(f'[*]Initial Population: {pop}')
 for gen in range(generations):
-    print('[*]' + f'Tournament: Gen-{gen+1}'.center(50, '='))
-    
-    pop = binary_tournament(pop, prng)
-    print('[*]' + ''.center(50, '='))
-    print(f'[*]Population(Gen {gen+1}): {pop}')
-    plt_hist(pop, gen+1)
+    competitors.append(prng.choices(pop, k = 2))
+plt_hist(pop)
+
+new_pop = []
+for _competitors in competitors:
+    new_pop.append(binary_tournament(_competitors, prng)[0])
+plt_hist(new_pop)
+
+print(new_pop)

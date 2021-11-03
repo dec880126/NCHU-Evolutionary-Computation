@@ -60,12 +60,12 @@ def binary_tournament(pop_in: list, prng: Random):
 competitors = []
 print(f'[*]Initial Population: {pop}')
 for gen in range(generations):
-    competitor_1, competitor_2 = prng.choices(pop, k = 2)
-    competitors.append([competitor_1, competitor_2])
-    for value in (competitor_1, competitor_2):
+    grouped_competitor = prng.choices(pop, k = 2)
+    competitors.append(grouped_competitor)
+    for value in grouped_competitor:
         pop.remove(value)
-print(competitors)
-plt_hist(pop)
+print(f"[>]Competitor Group: {competitors}")
+plt_hist(competitors)
 
 new_pop = []
 for _competitors in competitors:
